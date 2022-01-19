@@ -3,11 +3,11 @@ import { galleryItems } from "./gallery-items.js";
 
 const galleryEl = document.querySelector(".gallery");
 
-galleryEl.addEventListener("click", openLightbox);
-
 const pictureItemsMarkup = CreatMarkupPicturesCards(galleryItems);
 
 galleryEl.insertAdjacentHTML("beforeend", pictureItemsMarkup);
+
+galleryEl.addEventListener("click", onGalleryCardClick);
 
 function CreatMarkupPicturesCards(images) {
   return images
@@ -23,19 +23,18 @@ function CreatMarkupPicturesCards(images) {
     .join("");
 }
 
-// function onGalleryCardClick(evt) {
-//   evt.preventDefault();
+function onGalleryCardClick(evt) {
+  evt.preventDefault();
+  if (!evt.target.classList.contains("gallery__image")) {
+    return;
+  }
 
-//   if (!evt.target.classList.contains("gallery__image")) {
-//     return;
-//   }
+  // console.log(evt);
 
-//   openLightbox();
-//   galleryEl.removeEventListener("click", openLightbox);
-// }
+  openLightbox();
+}
 
-function openLightbox(e) {
-  e.preventDefault();
+function openLightbox() {
   let lightbox = new SimpleLightbox(".gallery a", {
     captionSelector: "img",
     captionType: "attr",
@@ -45,5 +44,5 @@ function openLightbox(e) {
     enableKeyboard: true,
   });
   lightbox.open();
-  galleryEl.removeEventListener("click", openLightbox);
+  galleryEl.removeEventListener("click", onGalleryCardClick);
 }
